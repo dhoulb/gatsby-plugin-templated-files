@@ -15,7 +15,7 @@
 	"main": "src/exports.js",
 	"engineStrict": true,
 	"engines": {
-		"yarn": ">=1.10.0",
+		"yarn": ">=1.0.0",
 		"node": ">=8.0.0"
 	},
 	"scripts": {
