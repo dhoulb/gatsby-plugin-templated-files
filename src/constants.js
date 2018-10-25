@@ -1,6 +1,6 @@
 exports.TYPE = "Templated";
 exports.URL = "/:slug";
-exports.INCLUDE = ["**/*.md"];
+exports.INCLUDE = ["**/*.md", "**/*.markdown"];
 exports.IGNORE = [
 	"**/.*",
 	"**/yarn.lock",
