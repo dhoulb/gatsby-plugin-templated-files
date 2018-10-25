@@ -1,0 +1,8 @@
+/node_modules/
+/coverage/
+/dist/
+/e2e/demo/node_modules/
+/e2e/demo/.cache/
+/e2e/demo/public/
+*.log
+.DS_Store

@@ -1,0 +1,23 @@
+{
+	"name": "gatsby-plugin-templated-files-e2e-site",
+	"author": "Dave Houlbrooke <dave@shax.com>",
+	"license": "0BSD",
+	"private": true,
+	"engineStrict": true,
+	"engines": {
+		"yarn": ">=1.10.0",
+		"node": ">=8.0.0"
+	},
+	"scripts": {
+		"develop": "gatsby develop",
+		"build": "gatsby build"
+	},
+	"dependencies": {
+		"gatsby": "^2.0.29",
+		"react": "^16.6.0",
+		"react-dom": "^16.6.0"
+	},
+	"devDependencies": {
+		"trash-cli": "^1.4.0"
+	}
+}
