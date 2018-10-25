@@ -4,5 +4,6 @@
 	"fixturesFolder": false,
 	"pluginsFile": false,
 	"supportFile": false,
-	"video": false
+	"video": false,
+	"defaultCommandTimeout": 300000
 }
