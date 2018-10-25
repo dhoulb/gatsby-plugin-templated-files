@@ -1,6 +1,6 @@
 # gatsby-plugin-templated-files
 
-![Travis-CI](https://img.shields.io/travis/dhoulb/gatsby-plugin-templated-files.svg?style=flat)
+[![Travis-CI](https://img.shields.io/travis/dhoulb/gatsby-plugin-templated-files.svg?style=flat)](https://travis-ci.com/dhoulb/gatsby-plugin-templated-files)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat)](https://github.com/semantic-release/semantic-release)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
 
@@ -76,10 +76,10 @@ module.exports = {
 ### `options.path` (required)
 Path to the directory containing one or more Markdown files, e.g. `path: "src/blog/"` will create corresponding pages for all `*.md` and `*.markdown` files. 
 
-### `options.component` (required)
+### `options.template` (required)
 String path to the component file (`*.js` or `*.jsx`) the pages should should use, e.g. `component: \`${__dirname}/src/templates/Blog.jsx\`` will route all requests for these pages to the `Blog.jsx` component. Use `$slug` variable in your exported query to access the specified slug.
 
-### `options.format` (optional)
+### `options.url` (optional)
 Set the format of the output URLs that are used for files, e.g. using `format: "blog/:slug"` will create pages with a `/blog/etc` prefix. Use this setting to append trailing slashes if you need them. Defaults to `":slug"`
 
 _Note: `:slug` is the only variable that can be used currently. If you wish to request more please open an issue._
