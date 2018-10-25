@@ -40,13 +40,13 @@
 	},
 	"dependencies": {
 		"anymatch": "^2.0.0",
-		"babel-eslint": "^10.0.1",
 		"chokidar": "^1.7.0",
 		"md5-file": "^4.0.0",
 		"pretty-bytes": "^5.1.0"
 	},
 	"devDependencies": {
 		"@commitlint/config-conventional": "^7.1.2",
+		"babel-eslint": "^10.0.1",
 		"commitlint": "^7.2.1",
 		"cypress": "^3.1.0",
 		"eslint": "^5.7.0",
