@@ -1,10 +1,14 @@
 # gatsby-plugin-templated-files
 
-Allows directories of static files (primarily Markdown) to be turned into pages in GatsbyJS (v2) utilising a template component in React that can output the source. Works like (`gatsby-plugin-page-creator`)[https://www.gatsbyjs.org/packages/gatsby-plugin-page-creator/] but for files of any type.
+![Travis-CI](https://img.shields.io/travis/dhoulb/gatsby-plugin-templated-files.svg?style=flat)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat)](https://github.com/semantic-release/semantic-release)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
 
-The primary use for this plugin is to crawl a directory of Markdown files and turn them into pages _without_ needing to write your own `gatsby-node.js` file (as shown in the Gatsby tutorial), which removes a lot of boilerplate. It also does not require (`gatsby-source-filesystem`)[https://www.gatsbyjs.org/packages/gatsby-source-filesystem/] as it handles crawling the filesystem itself.
+Allows directories of files to be turned into pages in GatsbyJS (v2) via a React template component. Effectively works like [`gatsby-plugin-page-creator`](https://www.gatsbyjs.org/packages/gatsby-plugin-page-creator/) but for files of any type.
 
-To use with Markdown you will still need (`gatsby-transformer-remark`)[https://www.gatsbyjs.org/packages/gatsby-transformer-remark/] (as per a normal Gatsby configuration). Follow the example below to see how to create a component that can query and output the parsed Markdown content.
+The primary use for this will be crawl a directory of Markdown files and turn them into pages matching the folder heirarchy _but without_ writing boilerplate code in your own `gatsby-node.js` file and without needing a separate [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/) configuration.
+
+You _do_ still need the [`gatsby-transformer-remark`](https://www.gatsbyjs.org/packages/gatsby-transformer-remark/) plugin to parse your files into Markdown. The example shows a template using this.
 
 ## Install
 
@@ -62,6 +66,7 @@ module.exports = {
 				template: "Pasta.jsx",
 			},
 		},
+		"gatsby-plugin-remark"
 	}
 }
 ```
@@ -69,9 +74,7 @@ module.exports = {
 ## Options
 
 ### `options.path` (required)
-Path to the directory containing one or more Markdown files, e.g. `path: \`${__dirname}/src/blog/\`` will create corresponding pages for all `*.md` and `*.markdown` files. 
-
-`index.md` files are used as the 'directory' page, e.g. a file called `a/b/index.md` will be used in a page at the URL `mysite.com/a/b/`
+Path to the directory containing one or more Markdown files, e.g. `path: "src/blog/"` will create corresponding pages for all `*.md` and `*.markdown` files. 
 
 ### `options.component` (required)
 String path to the component file (`*.js` or `*.jsx`) the pages should should use, e.g. `component: \`${__dirname}/src/templates/Blog.jsx\`` will route all requests for these pages to the `Blog.jsx` component. Use `$slug` variable in your exported query to access the specified slug.
@@ -104,7 +107,7 @@ Array of file globs to ignore when sourcing files. These will be added to the de
 ```
 
 ### `options.indexes`
-Array of file globs to use as index files, e.g. if `listing.md` is used as an index, then `a/b/c/listing.md` will have its page created at `/a/b/c/` (with no `listing.md`). Effectively index files _become_ the directory. Defaults to: 
+Array of file globs to use as index files, e.g. if `listing.md` is set as an index, then `a/b/c/listing.md` will have its page created at `/a/b/c` (with no `/listing`). Defaults to:
 
 ```
 **/index.*
@@ -113,9 +116,9 @@ Array of file globs to use as index files, e.g. if `listing.md` is used as an in
 
 ## Templates
 
-Create template files to output your Markdown as HTML via React. These files are like regular page files in GatsbyJS: they default export a React component, and export a GraphQL query as `query`. 
+To output your Markdown as HTML (via React) you'll need to create a template file. These files are just normal page components in GatsbyJS and export a React component, and export a GraphQL query as `query`. 
 
-Templates are (by convention) stored in the `src/templates` directory, and relative paths in this plugin are resolved relative to that folder. e.g. `"Page.jsx"` resolves to `src/templates/Page.jsx`. (Use an absolute path to point to a different directory.)
+Templates are (by convention) stored in the `src/templates` directory. The `options.template` setting is resolved relative to that dir. e.g. `"Page.jsx"` resolves to `src/templates/Page.jsx`. (Use an absolute path to point to a different directory.)
 
 ```js
 // src/templates/Pasta.jsx
@@ -239,3 +242,9 @@ _If you're receiving an error that `childrenTemplated` does not exist, use `chil
 	}
 }
 ```
+
+## Contributing
+
+Useful PRs are welcomed! Code must pass [ESLint](https://eslint.org/) (with [Prettier](https://prettier.io/) via [eslint-prettier](https://prettier.io/docs/en/eslint.html]), [Jest](https://jestjs.io/) unit tests, and [Cypress](https://www.cypress.io/) end-to-end tests. Tests can be run locally with `yarn test` and are run in [TravisCI](https://travis-ci.org/).
+
+All commits on the master branch are deployed automatically using [semantic-release](https://github.com/semantic-release/semantic-release) which bumps version numbers automatically based on commit messages. Commits must follow [Conventional Commits](https://www.conventionalcommits.org/). This is enforced by a [Husky](https://github.com/typicode/husky) precommit hook.
