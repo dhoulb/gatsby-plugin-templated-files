@@ -3,6 +3,7 @@
 [![Travis-CI](https://img.shields.io/travis/dhoulb/gatsby-plugin-templated-files.svg?style=flat)](https://travis-ci.com/dhoulb/gatsby-plugin-templated-files)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat)](https://github.com/semantic-release/semantic-release)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
+[![npm](https://img.shields.io/npm/dm/gatsby-plugin-templated-files.svg)](https://www.npmjs.com/package/gatsby-plugin-templated-files)
 
 Allows directories of files to be turned into pages in GatsbyJS (v2) via a React template component. Effectively works like [`gatsby-plugin-page-creator`](https://www.gatsbyjs.org/packages/gatsby-plugin-page-creator/) but for files of any type.
 
