@@ -27,7 +27,7 @@ module.exports = {
 		{
 			resolve: "gatsby-plugin-templated-files",
 			options: {
-				path: "./mypages",
+				path: "mypages",
 				template: "Page.jsx",
 			},
 		},
@@ -36,11 +36,11 @@ module.exports = {
 			options: {
 				// Crawl the ./blog/ directory.
 				path: "blog",
-				// Use an absolute path to the template file.
-				template: `${__dirname}/src/mytemplatedir/Blog.jsx`,
-				// Set a format for the URL (defaults to ":slug")
-				format: "blog/:slug",
-				// Files to include (defaults to .md only).
+				// Template file (absolute, or relative to src/templates)
+				template: `${__dirname}/src/othertemplates/Blog.jsx`,
+				// Set a format for the URL (defaults to "/:slug")
+				url: "/blog/:slug",
+				// Files to include (defaults to .md and *.markdown only).
 				include: [
 					"**/*.txt",
 					"**/*.md",
@@ -48,8 +48,8 @@ module.exports = {
 				]
 				// Files to ignore.
 				ignore: [
-					"**/\.*", // Ignore files starting with a dot.
-					"LICENSE.txt", // Ignore LICENSE.txt file.
+					"**/LICENSE.txt",
+					"**/LICENSE.md",
 				], 
 				// Files to use as directory indexes (defaults to index.* and README.*)
 				indexes: [
@@ -138,7 +138,6 @@ export default function Pasta({ data }) {
 	const markdown = file.childMarkdownRemark;
 	return (
 		<article>
-			<p>{file.dirs.join(" / ")}</p>
 			<h1>{markdown.frontmatter.title || file.name}</h1>
 			<div dangerouslySetInnerHTML={{ __html: markdown.html }} />
 		</article>
@@ -238,7 +237,7 @@ Query for a list of files with an `allTemplated` query. Results can again be fil
 }
 ```
 
-Query heirarchically nested files of the matched file with the following query. You can use this to output your entire tree of files (up to a required depth) to build navigation menus or sidebars.
+Query heirarchically nested children of the matched file with the following query. You can use this to output your entire tree of files (up to a required depth) e.g. to build navigation menus or sidebars. _You could make this neater with a fragment but we've made it explicit for the example._
 
 Heirarchy in this plugin constructs based on the final page URL (i.e. based on your `options.url` setting). So pages at `/a/x` and `/a/y` become children of the page at `/a`). 
 
@@ -253,16 +252,31 @@ _If you're receiving an error that `childrenTemplated` does not exist, use `chil
 				name                    # ''
 				dirs                    # []
 				relativePath            # 'index.md'
+				childMarkdownRemark {
+					frontmatter {
+						title           # 'Pasta Database'
+					}
+				}
 				childrenTemplated {
 					depth               # 1
 					name                # 'Ribbon Pasta'
 					dirs                # []
 					relativePath        # 'Ribbon Pasta/index.md'
+					childMarkdownRemark {
+						frontmatter {
+							title       # 'Ribbon Pasta'
+						}
+					}
 					childrenTemplated {
 						depth           # 2
 						name            # 'Tagliatelli'
 						dirs            # ['Ribbon Pasta']
 						relativePath    # 'Ribbon Pasta/Tagliatelli.md'
+						childMarkdownRemark {
+							frontmatter {
+								title   # 'Tagliatelli'
+							}
+						}
 					}
 				}
 			}
