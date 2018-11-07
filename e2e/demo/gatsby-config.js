@@ -7,7 +7,12 @@ module.exports = {
 			resolve: require.resolve("../../"), // Resolve to our copy of gatsby-plugin-templated-files
 			options: {
 				path: "pages",
-				template: "Page.jsx"
+				template: "Page.jsx",
+				url: "/pages/:slug",
+				include: ["*.md", "*.txt"],
+				ignore: ["IGNORE.md"],
+				indexes: ["index.*"],
+				debug: true
 			}
 		}
 	]
