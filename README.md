@@ -19,56 +19,57 @@ npm install gatsby-plugin-templated-files
 
 ## How to use
 
-Add the following to your `gatsby-config.js` file (note you can include multiple instances of the plugin to create separate sets of autopages):
+Configure in your `gatsby-config.js` file. Multiple instances can be included to crawl different paths or use different templates:
 
 ```js
 // gatsby-config.js
 module.exports = {
-	plugins: {
-		{
-			resolve: "gatsby-plugin-templated-files",
-			options: {
-				path: "mypages",
-				template: "Page.jsx",
-			},
-		},
-		{
-			resolve: "gatsby-plugin-templated-files",
-			options: {
-				// Crawl the ./blog/ directory.
-				path: "blog",
-				// Template file (absolute, or relative to src/templates)
-				template: `${__dirname}/src/othertemplates/Blog.jsx`,
-				// Set a format for the URL (defaults to "/:slug")
-				url: "/blog/:slug",
-				// Files to include (defaults to .md and *.markdown only).
-				include: [
-					"**/*.txt",
-					"**/*.md",
-					"**/*.html",
-				]
-				// Files to ignore.
-				ignore: [
-					"**/LICENSE.txt",
-					"**/LICENSE.md",
-				], 
-				// Files to use as directory indexes (defaults to index.* and README.*)
-				indexes: [
-					"**/README.md",
-					"**/sitepage.html",
-					"**/index.*",
-				]
-			},
-		},
-		{
-			resolve: "gatsby-plugin-templated-files",
-			options: {
-				path: "./pastas",
-				template: "Pasta.jsx",
-			},
-		},
-		"gatsby-plugin-remark"
-	}
+  plugins: {
+    {
+      resolve: "gatsby-plugin-templated-files",
+      options: {
+        path: "pages",
+        template: "Page.jsx",
+      },
+    },
+    {
+      resolve: "gatsby-plugin-templated-files",
+      options: {
+        path: "./pastas",
+        template: "Pasta.jsx",
+        url: "/pasta/:slug",
+      },
+    },
+    {
+      resolve: "gatsby-plugin-templated-files",
+      options: {
+        // Crawl the ./blog/ directory
+        path: "blog",
+        // Use this template file (relative to src/templates or absolute)
+        template: `${__dirname}/src/othertemplates/Blog.jsx`,
+        // Set a format for the URL (defaults to "/:slug")
+        url: "/blog/:slug",
+        // File globs to include (defaults to *.md and *.markdown)
+        include: [
+          "*.txt",
+          "*.md",
+          "*.html",
+        ]
+        // File globs to ignore
+        ignore: [
+          "LICENSE.txt",
+          "LICENSE.md",
+        ], 
+        // File globs to use as directory indexes (defaults to index.* and README.*)
+        indexes: [
+          "README.md",
+          "sitepage.html",
+          "index.*",
+        ]
+      },
+    },
+    "gatsby-plugin-remark"
+  }
 }
 ```
 
@@ -98,28 +99,34 @@ Set the output URL format for pages. Defaults to `/:slug`
 Array of file globs to include when crawling your `options.path` dir. If specified will replace the default list:
 
 ```
-**/*.md
-**/*.markdown
+*.md
+*.markdown
 ```
 
 ### `options.ignore` (optional)
 Array of file globs to ignore when crawling. If specified will _add to_ the default list (dotfiles and npm files):
 
 ```
-**/.*
-**/yarn.lock
-**/package.json
-**/package-lock.json
-**/node_modules
+.*
+yarn.lock
+package.json
+package-lock.json
+node_modules
 ```
 
 ### `options.indexes`
 Array of file globs to use as index files, e.g. if `listing.md` is an index then `a/b/c/listing.md` will have the `a/b/c` slug (with no `listing`). Defaults to:
 
 ```
-**/index.*
-**/README.*
+index.*
+README.*
 ```
+
+### _Note:_ glob patterns
+`options.include`, `options.ignore`, and `options.indexes` accept glob patterns, e.g. using `*` as a wildcard. These work like they do in `.gitignore`:
+
+- Globs with a `/` slash _somewhere_ in the glob: Matched relative to `options.path`
+- Glob with no slashes: Matched globally (i.e. `**/` prefix is implied!)
 
 ## Templates
 
@@ -135,32 +142,32 @@ import { graphql } from "gatsby";
 
 // Component.
 export default function Pasta({ data }) {
-	const file = data.templated;
-	const markdown = file.childMarkdownRemark;
-	return (
-		<article>
-			<h1>{markdown.frontmatter.title || file.name}</h1>
-			<div dangerouslySetInnerHTML={{ __html: markdown.html }} />
-		</article>
-	);
+  const file = data.templated;
+  const markdown = file.childMarkdownRemark;
+  return (
+    <article>
+      <h1>{markdown.frontmatter.title || file.name}</h1>
+      <div dangerouslySetInnerHTML={{ __html: markdown.html }} />
+    </article>
+  );
 }
 
 // Query.
 export const query = graphql`
-	query($id: String!) {
-		templated(id: { eq: $id }) {
-			absolutePath       # '/usr/var/www/pastas/Ribbon Pasta/Tagliatelli.md'
-			relativePath       # 'Ribbon Pasta/Tagliatelli.md'
-			name               # 'Tagliatelli'
-			dirs               # ['Ribbon Pasta']
-			childMarkdownRemark { 
-				html           # '...parsed Markdown content of Tagliatelli.md...'
-				frontmatter {
-					title      # '...title parsed from frontmatter of Tagliatelli.md...'
-				}
-			}
-		}
-	}
+  query($id: String!) {
+    templated(id: { eq: $id }) {
+      absolutePath       # '/usr/var/www/pastas/Ribbon Pasta/Tagliatelli.md'
+      relativePath       # 'Ribbon Pasta/Tagliatelli.md'
+      name               # 'Tagliatelli'
+      dirs               # ['Ribbon Pasta']
+      childMarkdownRemark { 
+        html           # '...parsed Markdown content of Tagliatelli.md...'
+        frontmatter {
+          title      # '...title parsed from frontmatter of Tagliatelli.md...'
+        }
+      }
+    }
+  }
 `;
 ```
 
@@ -170,35 +177,35 @@ This GraphQL query retrieves a single `Templated` file node. **All** fields in t
 
 ```graphql
 query($id: String!) {
-	templated(id: { eq: $id }) {
-		id                   # 'b82587df-f952-5201-85c5-bcb9df3a17ca'
-		absolutePath         # '/usr/var/www/pastas/Ribbon Pasta/Tagliatelli.md'
-		relativePath         # 'Ribbon Pasta/Tagliatelli.md'
-		rootPath             # 'pastas/Ribbon Pasta/Tagliatelli.md'
-		templatePath         # '/usr/var/www/src/templates/Pasta.jsx'
-		index                # false (would be true for e.g. index.md)
-		base                 # 'Tagliatelli.md'
-		name                 # 'Tagliatelli'
-		extension            # 'md'
-		dir                  # 'Ribbon Pasta'
-		dirs                 # ['Ribbon Pasta']
-		slug                 # 'ribbon-pasta/tagliatelli'
-		slugs                # ['ribbon-pasta', 'tagliatelli']
-		depth                # 2
-		url                  # '/ribbon-pasta/tagliatelli'
-		size                 # 1048576
-		prettySize           # '1 MB'
-		modifiedTime         # 'Mon Oct 22 2018 01:01:33 GMT'
-		accessedTime         # 'Mon Oct 22 2018 01:01:33 GMT'
-		changedTime          # 'Mon Oct 22 2018 01:01:33 GMT'
-		birthtime            # 'Mon Oct 22 2018 01:01:33 GMT'
-		content              # '...entire raw contents of Tagliatelli.md...'
-		internal {
-			type             # 'Templated'
-			mediaType        # 'text/markdown'
-			contentDigest    # '2b365824e5c9240509bc33ec15b05070'
-		}
-	}
+  templated(id: { eq: $id }) {
+    id               # 'b82587df-f952-5201-85c5-bcb9df3a17ca'
+    absolutePath     # '/usr/var/www/pastas/Ribbon Pasta/Tagliatelli.md'
+    relativePath     # 'Ribbon Pasta/Tagliatelli.md'
+    rootPath         # 'pastas/Ribbon Pasta/Tagliatelli.md'
+    templatePath     # '/usr/var/www/src/templates/Pasta.jsx'
+    index            # false (would be true for e.g. index.md)
+    base             # 'Tagliatelli.md'
+    name             # 'Tagliatelli'
+    extension        # 'md'
+    dir              # 'Ribbon Pasta'
+    dirs             # ['Ribbon Pasta']
+    slug             # 'ribbon-pasta/tagliatelli'
+    slugs            # ['ribbon-pasta', 'tagliatelli']
+    depth            # 2
+    url              # '/pasta/ribbon-pasta/tagliatelli'
+    size             # 1048576
+    prettySize       # '1 MB'
+    modifiedTime     # 'Mon Oct 22 2018 01:01:33 GMT'
+    accessedTime     # 'Mon Oct 22 2018 01:01:33 GMT'
+    changedTime      # 'Mon Oct 22 2018 01:01:33 GMT'
+    birthtime        # 'Mon Oct 22 2018 01:01:33 GMT'
+    content          # '...entire raw contents of Tagliatelli.md...'
+    internal {
+      type           # 'Templated'
+      mediaType      # 'text/markdown'
+      contentDigest  # '2b365824e5c9240509bc33ec15b05070'
+    }
+  }
 }
 ```
 
@@ -206,18 +213,18 @@ If you're using [`gatsby-transformer-remark`](https://www.gatsbyjs.org/packages/
 
 ```graphql
 query($path: String!) {
-	templated(rootPath: { eq: $path }) {
-		absolutePath       # '/usr/var/www/pastas/Ribbon Pasta/Tagliatelli.md'
-		rootPath           # 'pastas/Ribbon Pasta/Tagliatelli.md'
-		name               # 'Tagliatelli'
-		dirs               # ['Ribbon Pasta']
-		childMarkdownRemark { 
-			html           # '...parsed Markdown content of Tagliatelli.md...'
-			frontmatter {
-				title      # '...title parsed from frontmatter of Tagliatelli.md...'
-			}
-		}
-	}
+  templated(rootPath: { eq: $path }) {
+    absolutePath  # '/usr/var/www/pastas/Ribbon Pasta/Tagliatelli.md'
+    rootPath      # 'pastas/Ribbon Pasta/Tagliatelli.md'
+    name          # 'Tagliatelli'
+    dirs          # ['Ribbon Pasta']
+    childMarkdownRemark { 
+      html        # '...parsed Markdown content of Tagliatelli.md...'
+      frontmatter {
+        title     # '...title parsed from frontmatter of Tagliatelli.md...'
+      }
+    }
+  }
 }
 ```
 
@@ -225,16 +232,16 @@ Query for a list of files with an `allTemplated` query. Results can again be fil
 
 ```graphql
 {
-	allTemplated(filter: { name: { eq: "abc" } }, sort: { fields: [rootPath], order: DESC }) {
-		edges {
-			node {
-				base            # 'Tagliatelli.md'
-				extension       # 'md'
-				dir             # 'Ribbon Pasta'
-				modifiedTime    # 'Mon Oct 22 2018 01:01:33 GMT'
-			}
-		}
-	}
+  allTemplated(filter: { name: { eq: "abc" } }, sort: { fields: [rootPath], order: DESC }) {
+    edges {
+      node {
+        base          # 'Tagliatelli.md'
+        extension     # 'md'
+        dir           # 'Ribbon Pasta'
+        modifiedTime  # 'Mon Oct 22 2018 01:01:33 GMT'
+      }
+    }
+  }
 }
 ```
 
@@ -246,43 +253,43 @@ _If you're receiving an error that `childrenTemplated` does not exist, use `chil
 
 ```graphql
 {
-	allTemplated(filter: { depth: { eq: 0 } }) {
-		edges {
-			node {
-				depth                   # 0
-				name                    # ''
-				dirs                    # []
-				relativePath            # 'index.md'
-				childMarkdownRemark {
-					frontmatter {
-						title           # 'Pasta Database'
-					}
-				}
-				childrenTemplated {
-					depth               # 1
-					name                # 'Ribbon Pasta'
-					dirs                # []
-					relativePath        # 'Ribbon Pasta/index.md'
-					childMarkdownRemark {
-						frontmatter {
-							title       # 'Ribbon Pasta'
-						}
-					}
-					childrenTemplated {
-						depth           # 2
-						name            # 'Tagliatelli'
-						dirs            # ['Ribbon Pasta']
-						relativePath    # 'Ribbon Pasta/Tagliatelli.md'
-						childMarkdownRemark {
-							frontmatter {
-								title   # 'Tagliatelli'
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+  allTemplated(filter: { depth: { eq: 0 } }) {
+    edges {
+      node {
+        depth         # 0
+        name          # ''
+        dirs          # []
+        relativePath  # 'index.md'
+        childMarkdownRemark {
+          frontmatter {
+            title     # 'Pasta Database'
+          }
+        }
+        childrenTemplated {
+          depth         # 1
+          name          # 'Ribbon Pasta'
+          dirs          # []
+          relativePath  # 'Ribbon Pasta/index.md'
+          childMarkdownRemark {
+            frontmatter {
+              title     # 'Ribbon Pasta'
+            }
+          }
+          childrenTemplated {
+            depth         # 2
+            name          # 'Tagliatelli'
+            dirs          # ['Ribbon Pasta']
+            relativePath  # 'Ribbon Pasta/Tagliatelli.md'
+            childMarkdownRemark {
+              frontmatter {
+                title     # 'Tagliatelli'
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 ```
 

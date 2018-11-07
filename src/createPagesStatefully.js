@@ -64,15 +64,21 @@ module.exports = function createPagesStatefully(
 	if (!fs.statSync(resolvedTemplate).isFile())
 		reporter.panic(`${RP} options.template: Template file must be a file: ${resolvedTemplate}`);
 
+	// Prepend `**/` to matchers if no slash is found in string.
+	// This is how .gitignore works and it makes things neater because you don't need to remember the "**/" pattern.
+	const includeGlobs = include.map(x => (x.includes("/") ? x : `**/${x}`));
+	const ignoreGlobs = ignore.map(x => (x.includes("/") ? x : `**/${x}`));
+	const indexesGlobs = indexes.map(x => (x.includes("/") ? x : `**/${x}`));
+
 	// Make sure URL has leading slash.
 	const templateURL = urlOption[0] !== "/" ? `/${urlOption}` : urlOption;
 
 	// Create array of globs for wanted files.
-	const globs = include.map(x => path.join(resolvedPath, x));
+	const globs = includeGlobs.map(x => path.join(resolvedPath, x));
 
 	// Listen for new component pages to be added or removed.
 	chokidar
-		.watch(globs, { ignore: [...IGNORE, ...ignore], alwaysStat: true })
+		.watch(globs, { ignored: [...IGNORE, ...ignoreGlobs], alwaysStat: true })
 		.on("add", (file, stats) => {
 			try {
 				// Log.
@@ -82,7 +88,7 @@ module.exports = function createPagesStatefully(
 				const nodes = store.getState().nodes;
 				const relative = path.relative(resolvedPath, file);
 				const rootPath = path.relative(process.cwd(), file);
-				const index = anymatch(indexes, file);
+				const index = anymatch(indexesGlobs, file);
 				const info = pathinfo(relative);
 				const extension = info.extension;
 
