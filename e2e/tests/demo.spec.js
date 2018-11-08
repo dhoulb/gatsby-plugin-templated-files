@@ -14,7 +14,7 @@ describe("demo", () => {
 	it("Visits /pages/child2 and checks content", () => {
 		cy.visit("/pages/child2");
 		cy.get("pre").contains(
-			'{"rootPath":"pages/child2/index.md","relativePath":"child2/index.md","depth":1,"slug":"child2","content":"The contents of CHILD2"}'
+			'{"rootPath":"pages/child2/LIST.md","relativePath":"child2/LIST.md","depth":1,"slug":"child2","content":"The contents of CHILD2"}'
 		);
 	});
 	it("Visits /pages/child2/subchild1 and checks content", () => {
