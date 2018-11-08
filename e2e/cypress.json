@@ -5,5 +5,5 @@
 	"pluginsFile": false,
 	"supportFile": false,
 	"video": false,
-	"defaultCommandTimeout": 300000
+	"defaultCommandTimeout": 30000
 }
