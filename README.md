@@ -128,6 +128,8 @@ README.*
 - Globs with a `/` slash _somewhere_ in the glob: Matched relative to `options.path`
 - Glob with no slashes: Matched globally (i.e. `**/` prefix is implied!)
 
+Note that globs are relative to `options.path`, e.g. `/index.md` matches `${options.path}/index.md`
+
 ## Templates
 
 To output your Markdown as HTML (via React) you'll need to create a template file. These files are just normal GatsbyJS page components which have two requirements:
