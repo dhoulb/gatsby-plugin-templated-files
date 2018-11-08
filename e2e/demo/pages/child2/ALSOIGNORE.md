@@ -1,0 +1,1 @@
+This file is ignored because it's in the options.ignore list.

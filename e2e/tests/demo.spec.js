@@ -43,4 +43,8 @@ describe("demo", () => {
 		cy.visit("/pages/dotfile");
 		cy.get("h1").contains("Gatsby.js development 404 page");
 	});
+	it("Visits /pages/child2/alsoignore and checks code", () => {
+		cy.visit("/pages/child2/alsoignore");
+		cy.get("h1").contains("Gatsby.js development 404 page");
+	});
 });

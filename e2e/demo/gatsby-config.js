@@ -9,9 +9,9 @@ module.exports = {
 				path: "pages",
 				template: "Page.jsx",
 				url: "/pages/:slug",
-				include: ["*.md", "*.txt"],
-				ignore: ["IGNORE.md"],
-				indexes: ["index.*"],
+				include: ["*.md", "/child3.txt"],
+				ignore: ["IGNORE.md", "child2/ALSOIGNORE.md"],
+				indexes: ["index.*", "child2/LIST.md"],
 				debug: true
 			}
 		}
