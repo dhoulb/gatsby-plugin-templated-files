@@ -67,9 +67,10 @@ module.exports = function createPagesStatefully(
 	// Prepend `**/` to matchers if no slash is found in string.
 	// This is how .gitignore works and it makes things neater because you don't need to remember the "**/" pattern.
 	// Also prefix the resolvedPath to each glob.
-	const includeGlobs = include.map(x => path.join(resolvedPath, x.includes("/") ? x : `**/${x}`));
-	const ignoreGlobs = ignore.map(x => path.join(resolvedPath, x.includes("/") ? x : `**/${x}`));
-	const indexesGlobs = indexes.map(x => path.join(resolvedPath, x.includes("/") ? x : `**/${x}`));
+	// On Windows, path.join uses escaped backslashes, which breaks chokidar, so we replace them with forward slashes.
+	const includeGlobs = include.map(x => path.join(resolvedPath, x.includes("/") ? x : `**/${x}`).replace(/\\/g, '/'));
+	const ignoreGlobs = ignore.map(x => path.join(resolvedPath, x.includes("/") ? x : `**/${x}`).replace(/\\/g, '/'));
+	const indexesGlobs = indexes.map(x => path.join(resolvedPath, x.includes("/") ? x : `**/${x}`).replace(/\\/g, '/'));
 
 	// Make sure URL has leading slash.
 	const templateURL = urlOption[0] !== "/" ? `/${urlOption}` : urlOption;
