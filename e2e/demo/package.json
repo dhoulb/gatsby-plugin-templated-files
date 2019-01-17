@@ -9,8 +9,9 @@
 		"node": ">=8.0.0"
 	},
 	"scripts": {
-		"develop": "gatsby develop",
-		"build": "gatsby build"
+		"clean": "trash .cache && trash ./public",
+		"develop": "yarn clean && gatsby develop",
+		"build": "yarn clean && gatsby build"
 	},
 	"dependencies": {
 		"gatsby": "^2.0.29",
