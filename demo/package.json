@@ -9,7 +9,7 @@
 		"node": ">=8.0.0"
 	},
 	"scripts": {
-		"clean": "trash .cache && trash ./public",
+		"clean": "trash .cache && trash public",
 		"develop": "yarn clean && gatsby develop",
 		"build": "yarn clean && gatsby build"
 	},

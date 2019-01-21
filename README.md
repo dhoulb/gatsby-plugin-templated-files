@@ -48,12 +48,12 @@ module.exports = {
         // Use this template file (relative to src/templates or absolute)
         template: `${__dirname}/src/othertemplates/Blog.jsx`,
         // Set a format for the URL (defaults to "/:slug")
-        url: "/blog/:slug",
+        url: "/blog/{year}/{month}/{day}/{ref}",
         // File globs to include (defaults to *.md and *.markdown)
         include: [
-          "*.txt",
-          "*.md",
-          "*.html",
+          "{year}-{month}-{day}-{ref}.txt",
+          "{year}-{month}-{day}-{ref}.md",
+          "{year}-{month}-{day}-{ref}.html",
         ]
         // File globs to ignore
         ignore: [
@@ -93,18 +93,38 @@ Set the output URL format for pages. Defaults to `/:slug`
 - Use to append trailing slashes e.g. `/:slug/`
 - Use to prepend directories e.g. `/blog/:slug`
 - Leading slash is recommended but not required
-- Currently `:slug` is the only available variable — open an issue if you need more
+- `:slug` parameter is always available
+- Parameters created in `options.include` can also be used (e.g. `:year`, see below)
+- Parameters can be in `:express`, `{jsx}`, `${es6}`, or `{{handlebars}}` format
+- Parameter values are 'sluggified', i.e. `My Page` becomes `my-page`
 
 ### `options.include` (optional)
-Array of file globs to include when crawling your `options.path` dir. If specified will replace the default list:
+String file glob (or array of globs) to include when crawling the `options.path` dir. If specified will replace the default list:
 
 ```
 *.md
 *.markdown
 ```
 
+`options.include` can include _parameters_ in `:express`, `{jsx}`, `${es6}`, and `{{handlebars}}` formats in order to extract additional information from the filename. These work like `*` wildcard matching _but_ are available for querying in the GraphQL node (as `params`).
+
+For example if `options.include` was set to `":year-:month-:day - :title.md"` then files matching the glob `*-*-* - *.md` will be included, and the matched parameters can be used in GraphQL queries:
+
+```graphql
+query($year: String!) {
+  templated(params { year: { eq: $year } }) { 
+    params { 
+      year
+      month
+      day
+      title
+    }
+  }
+}
+```
+
 ### `options.ignore` (optional)
-Array of file globs to ignore when crawling. If specified will _add to_ the default list (dotfiles and npm files):
+String file glob (or array of globs) to ignore when crawling. If specified will _add to_ the default list (dotfiles and npm files):
 
 ```
 .*
@@ -115,7 +135,7 @@ node_modules
 ```
 
 ### `options.indexes`
-Array of file globs to use as index files, e.g. if `listing.md` is an index then `a/b/c/listing.md` will have the `a/b/c` slug (with no `listing`). Defaults to:
+String file glob (or array of globs) to use as index files, e.g. if `listing.md` is an index then `a/b/c/listing.md` will have the `a/b/c` slug (with no `listing`). Defaults to:
 
 ```
 index.*
@@ -123,12 +143,10 @@ README.*
 ```
 
 ### _Note:_ glob patterns
-`options.include`, `options.ignore`, and `options.indexes` accept glob patterns, e.g. using `*` as a wildcard. These work like they do in `.gitignore`:
+`options.include`, `options.ignore`, and `options.indexes` can include `*` as a wildcard. They do not support other features of glob or RegExp and cannot include directories (only filename patterns like `*.md` and `README.*`).
 
-- Globs with a `/` slash _somewhere_ in the glob: Matched relative to `options.path`
-- Glob with no slashes: Matched globally (i.e. `**/` prefix is implied!)
-
-Note that globs are relative to `options.path`, e.g. `/index.md` matches `${options.path}/index.md`
+### _Note:_ example configuration
+[A full example configuration](https://github.com/dhoulb/gatsby-plugin-templated-files/tree/master/demo) is available to show an example of a basic heirarchical setup, and a setup using file format parameters to construct URLs (year/month/day etc). End-to-end tests are run against this demo so it should be correct!
 
 ## Templates
 
@@ -202,6 +220,7 @@ query($id: String!) {
     changedTime      # 'Mon Oct 22 2018 01:01:33 GMT'
     birthtime        # 'Mon Oct 22 2018 01:01:33 GMT'
     content          # '...entire raw contents of Tagliatelli.md...'
+    params {}        # { ...any params extracted from options.include pattern }
     internal {
       type           # 'Templated'
       mediaType      # 'text/markdown'
@@ -300,3 +319,7 @@ _If you're receiving an error that `childrenTemplated` does not exist, use `chil
 Useful PRs are welcomed! Code must pass [ESLint](https://eslint.org/) (with [Prettier](https://prettier.io/) via [eslint-prettier](https://prettier.io/docs/en/eslint.html]), [Jest](https://jestjs.io/) unit tests, and [Cypress](https://www.cypress.io/) end-to-end tests. Run this locally with `yarn test` and wait for it to be confirmed by [TravisCI](https://travis-ci.org/).
 
 All commits on the master branch are deployed automatically using [semantic-release](https://github.com/semantic-release/semantic-release) which bumps version numbers automatically based on commit messages, so Commits must follow [Conventional Commits](https://www.conventionalcommits.org/). This is enforced by a [Husky](https://github.com/typicode/husky) precommit hook.
+
+## Changelog
+
+See [Releases](https://github.com/dhoulb/gatsby-plugin-templated-files/releases)

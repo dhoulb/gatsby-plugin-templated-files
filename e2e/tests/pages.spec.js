@@ -1,4 +1,4 @@
-describe("demo", () => {
+describe("pages", () => {
 	it("Visits /pages/ and checks content", () => {
 		cy.visit("/pages/");
 		cy.get("pre").contains(

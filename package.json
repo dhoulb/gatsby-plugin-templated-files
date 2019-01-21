@@ -16,7 +16,7 @@
 	"engineStrict": true,
 	"engines": {
 		"yarn": ">=1.0.0",
-		"node": ">=8.0.0"
+		"node": ">=8.6.0"
 	},
 	"scripts": {
 		"test": "yarn lint && yarn jest && yarn e2e",
@@ -25,7 +25,7 @@
 		"jest": "jest --no-cache",
 		"jest:watch": "jest --watchAll",
 		"e2e": "start-server-and-test e2e:serve http://localhost:8000 e2e:cypress",
-		"e2e:serve": "cd e2e/demo && yarn develop",
+		"e2e:serve": "cd demo && yarn develop",
 		"e2e:cypress": "cd e2e && npx cypress run",
 		"semantic-release": "semantic-release",
 		"travis-deploy-once": "travis-deploy-once"
@@ -37,8 +37,11 @@
 	},
 	"dependencies": {
 		"anymatch": "^2.0.0",
+		"blork": "^9.2.1",
 		"chokidar": "^2.0.4",
+		"hokey-cokey": "^2.0.0",
 		"md5-file": "^4.0.0",
+		"path-to-from-params": "^1.0.3",
 		"pretty-bytes": "^5.1.0"
 	},
 	"devDependencies": {

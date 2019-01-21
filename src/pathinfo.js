@@ -1,3 +1,5 @@
+const { slugify } = require("./helpers");
+
 /**
  * Turn a file name like `contact/directions.md` into an equivalent URL slug like `contact/directions`
  * Generate some other fields at the same time.
@@ -59,14 +61,3 @@ module.exports = function pathinfo(path) {
 		depth: slugs.length
 	};
 };
-
-// Turn string into a slug.
-function slugify(slug) {
-	return slug
-		.toLowerCase()
-		.replace(/[\s._]+/g, "-") // Change spaces, dots, underscores to hyphens.
-		.replace(/[^a-z0-9_-]/g, "") // Remove disallowed characters.
-		.replace(/^[-]+/, "") // Remove leading hyphens.
-		.replace(/[-]+$/, "") // Remove trailing hyphens.
-		.replace(/[-]+$/, ""); // Remove two-in-a-row hyphens.
-}
