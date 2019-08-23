@@ -68,7 +68,7 @@ module.exports = {
         ]
       },
     },
-    "gatsby-plugin-remark"
+    "gatsby-transformer-remark"
   }
 }
 ```
