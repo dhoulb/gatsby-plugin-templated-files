@@ -41,6 +41,8 @@
 		"no-var": 2,
 		"prefer-const": 2,
 		"prefer-spread": 2,
-		"react/prop-types": 0
+		"react/prop-types": 0,
+		"import/no-extraneous-dependencies": 0,
+		"import/order": 0
 	}
 }
