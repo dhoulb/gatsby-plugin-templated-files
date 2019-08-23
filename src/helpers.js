@@ -39,7 +39,8 @@ function slugify(slug) {
  * @internal
  */
 function indexify(info) {
-	info.base = info.name = info.dirs.length ? info.dirs.pop() : "";
+	info.name = info.dirs.length ? info.dirs.pop() : "";
+	info.base = info.name;
 	info.dir = info.dirs.join("/");
 	info.extension = "";
 	info.slugs.pop();

@@ -1,5 +1,5 @@
 {
-	"parser": "babel-eslint",
+	// "parser": "babel-eslint",
 	"plugins": [
 		"json"
 	],
@@ -41,6 +41,11 @@
 		"no-var": 2,
 		"prefer-const": 2,
 		"prefer-spread": 2,
+		"consistent-return": 0,
+		"no-param-reassign": 0,
+		"no-restricted-syntax": 0,
+		"prefer-destructuring": 0,
+		"prefer-template": 0,
 		"react/prop-types": 0,
 		"import/no-extraneous-dependencies": 0,
 		"import/order": 0

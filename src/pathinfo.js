@@ -51,13 +51,13 @@ module.exports = function pathinfo(path) {
 
 	// Return.
 	return {
-		base: base,
-		name: name,
-		extension: extension,
+		base,
+		name,
+		extension,
 		dir: segs.slice(0, -1).join("/"),
 		dirs: segs.slice(0, -1),
 		slug: slugs.join("/"),
-		slugs: slugs,
+		slugs,
 		depth: slugs.length
 	};
 };

@@ -126,7 +126,7 @@ module.exports = function createPagesStatefully(
 						if (node.internal.type === TYPE && n.url === node.url)
 							return reporter.warn(
 								PREFIX +
-									`Attempted to create two pages with the same path (second page was skipped): 
+									`Attempted to create two pages with the same path (second page was skipped):
 									${n.rootPath}
 									${node.rootPath}`
 							);
@@ -217,7 +217,7 @@ module.exports = function createPagesStatefully(
 
 							// Delete node.
 							// Do this after so if the child-removes fail we don't have a reference to a dead page.
-							actions.deleteNode({ node: node });
+							actions.deleteNode({ node });
 							if (debug) reporter.log(PREFIX + `delete node ${node.url}`);
 
 							// Delete page.
