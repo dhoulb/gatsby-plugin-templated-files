@@ -64,7 +64,7 @@
 		"react-dom": "^16.6.0",
 		"semantic-release": "^15.10.5",
 		"start-server-and-test": "^1.7.5",
-		"trash-cli": "^1.4.0"
+		"trash-cli": "^3.0.0"
 	},
 	"peerDependencies": {}
 }
